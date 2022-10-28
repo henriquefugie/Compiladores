@@ -1,0 +1,15 @@
+// Nome Discente:
+// Matrícula:
+// Data:
+
+
+// Declaro que sou o único autor e responsável por este programa. Todas as partes do programa, exceto as que foram fornecidas
+// pelo professor ou copiadas do livro ou das bibliotecas de Aho et al., foram desenvolvidas por mim. Declaro também que
+// sou responsável por todas  as eventuais cópias deste programa e que não distribui nem facilitei a distribuição de cópias. 
+
+///////////// Leia e depois apague  os comentários abaixo //////////////////////////
+
+// Escreva um comentário no início do arquivo fonte para indicar O QUE o código faz
+// Coloque comentários no seu código de modo a explicar o que está sendo feito
+// Se utilizar ou basear seu código em alguma fonte externa, explicite este fato. Se não houver nenhuma menção em contrário 
+// vou considerar que o código foi baseado me descrito em Aho et al.

@@ -1,0 +1,146 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>Trabalho de Compiladores</title>
+</head>
+<body>
+<h1>A Linguagem <em>Monga</em></h1>
+
+<p>
+A linguagem Monga é uma linguagem procedural simples.
+Ela oferece os tipos int, float, arrays e records (structs);
+estruturas de controle <code>while</code> e <code>if-then-else</code>;
+variáveis globais e locais;
+e funções com parâmetros e retorno de valores.
+Além disso, ela gera código objeto compatível com C,
+o que permite que programas Monga possam chamar funções das
+bibliotecas padrão de C.
+
+
+</p><h2>Léxico</h2>
+
+<p>
+Comentários em Monga começam com <code>#</code> e terminam no final da linha.
+Identificadores são como em C.
+Numerais, tanto inteiros como ponto flutuante,
+podem ser escritos em decimal ou em hexa
+(começando com <code>0x</code>).
+
+</p><p>
+A lista de palavras reservadas segue abaixo:
+</p><pre>as      else    function
+if      new     return
+type    var     while
+</pre>
+
+<p>
+</p><h2>Sintaxe</h2>
+
+A sintaxe da linguagem segue abaixo, em EBNF.
+Note que <code>{ X }</code> significa
+uma lista de zero ou mais ocorrências de <code>X</code>
+e <code>[ X ]</code> significa
+um <code>X</code> opcional.
+Itens entre aspas simples ou em maiúsculas
+denotam terminais (tokens),
+outros nomes denotam não-terminais.
+ 
+<pre>program : { definition }
+</pre>
+
+<pre>definition : def-variable | def-function | def-type
+
+def-variable : VAR ID ':' type ';'
+
+type : ID
+
+def-type : TYPE ID '=' typedesc ;
+
+typedesc : ID | '[' typedesc ']' | '{' { field } '}'
+
+field : ID ':' type ';' ;
+
+def-function : FUNCTION ID '(' parameters ')' [':' type] block
+
+parameters : [ parameter { ',' parameter } ]
+
+parameter : ID ':' type
+
+block : '{' { def-variable } { statement } '}'
+
+statement : IF cond block [ ELSE block ]
+          | WHILE cond block
+          | var '=' exp ';'
+          | RETURN [ exp ] ';'
+          | call ';'
+          | '@' exp ';'
+          | block
+
+var : ID | exp '[' exp ']' | exp '.' ID
+
+exp : NUMERAL
+    | var
+    | '(' exp ')'
+    | call
+    | exp AS type
+    | NEW type [ '[' exp ']' ]
+    | '-' exp
+    | exp '+' exp
+    | exp '-' exp
+    | exp '*' exp
+    | exp '/' exp
+    | cond '?' exp ':' exp
+
+cond :  '(' cond ')'
+	| exp '==' exp
+	| exp '~=' exp
+	| exp '&lt;=' exp
+	| exp '&gt;=' exp
+	| exp '&lt;' exp
+	| exp '&gt;' exp
+	| '!' cond
+	| cond '&amp;&amp;' cond
+	| cond '||' cond
+
+call : ID '(' explist ')'
+
+explist : [ exp { ',' exp } ]
+</pre>
+
+
+<p>
+Observações:
+</p><ul>
+
+<li>A execução de um programa consiste na execução de sua
+função <code>main</code>.
+
+</li><li>Existem tipos pré-definidos <code>int</code> e <code>float</code>.
+
+</li><li>
+A expressão <code>new tipo [exp]</code> cria um novo array com
+um número <code>exp</code> de elementos do dado tipo;
+a expressão <code>exp</code> deve ter tipo inteiro.
+A expressão <code>new tipo</code> (sem dimensão) cria
+um novo record do dado tipo.
+
+</li><li>A expressão <code>e as t</code> converte
+o valor da expressão <code>e</code> para o tipo <code>t</code>.
+
+</li><li> <code>'&amp;&amp;'</code> e <code>'||'</code> devem usar "curto-circuito".
+
+</li><li> Em operações misturando <code>int</code> e <code>float</code>,
+os valores <code>int</code> devem ser convertidos para <code>float</code>.
+
+</li><li>O comando <code>@ exp;</code> imprime o valor da expressão
+<code>exp</code>.
+
+</li></ul>
+
+<p>
+Qualquer dúvida sobre a linguagem, consulte o professor.
+
+
+
+
+</p></body></html>
