@@ -1,0 +1,55 @@
+program : { definition }
+
+definition : def-variable | def-function
+
+def-variable : VAR ID ':' type ';'
+
+type : ID
+
+def-function : FUNCTION ID '(' parameters ')' [':' type] block
+
+parameters : [ parameter { ',' parameter } ]
+
+parameter : ID ':' type
+
+block : '{' { def-variable } { statement } '}'
+
+statement : IF cond block [ ELSE block ]
+          | WHILE cond block
+          | var '=' exp ';'
+          | RETURN [ exp ] ';'
+          | call ';'
+          | '@' exp ';'
+          | block
+
+var : ID | exp '[' exp ']' | exp '.' ID
+
+<exp> -> <atrib>
+<atrib> -> <or> <restoAtrib>
+<restoAtrib> -> '=' <atrib> | lambda
+<or> -> <and> <restoOr>
+<restoOr> -> '||' <and> <restoOr> | lambda
+<and> -> <not> <restoAnd>
+<restoAnd> -> '&&' <not> <restoAnd> | lambda
+<not> -> '!' <not> | <rel>
+<rel> -> <add> <restoRel>
+<restoRel> -> '==' <add> | '!=' <add>
+            | '<' <add> | '<=' <add> 
+            | '>' <add> | '>=' <add> | lambda
+<add> -> <mult> <restoAdd>
+<restoAdd> -> '+' <mult> <restoAdd> 
+            | '-' <mult> <restoAdd> | lambda
+<mult> -> <uno> <restoMult>
+<restoMult> -> '*' <uno> <restoMult>
+            |  '/' <uno> <restoMult> 
+            |  '%' <uno> <restoMult> | lambda
+<uno> -> '+' <uno> | '-' <uno> | <fator>
+<fator> -> 'NUMint' | 'NUMfloat' 
+         | 'IDENT'  | '(' <atrib> ')'
+
+call : ID '(' explist ')'
+
+explist : [ exp { ',' exp } ]
+
+
+
