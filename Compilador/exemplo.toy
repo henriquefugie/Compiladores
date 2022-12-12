@@ -1,0 +1,12 @@
+# teste do lexico
+
+a=0;
+read(a);
+a = a+2;
+print(a);
+c = (34* 7 + (6 + 34)) * 45;   # 12510
+d = c * 2 + 6;                 # 25026
+f = d + c;                     # 37536
+
+print(f);
+

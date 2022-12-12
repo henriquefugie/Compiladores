@@ -14,8 +14,8 @@ parameter : ID ':' type
 
 block : '{' { def-variable } { statement } '}'
 
-statement : IF cond block [ ELSE block ]
-          | WHILE cond block
+statement : IF exp block [ ELSE block ]
+          | WHILE exp block
           | var '=' exp ';'
           | RETURN [ exp ] ';'
           | call ';'
@@ -44,8 +44,7 @@ var : ID | exp '[' exp ']' | exp '.' ID
             |  '/' <uno> <restoMult> 
             |  '%' <uno> <restoMult> | lambda
 <uno> -> '+' <uno> | '-' <uno> | <fator>
-<fator> -> 'NUMint' | 'NUMfloat' 
-         | 'IDENT'  | '(' <atrib> ')'
+<fator> -> 'NUMint' | 'NUMfloat' | '(' <atrib> ')'
 
 call : ID '(' explist ')'
 
