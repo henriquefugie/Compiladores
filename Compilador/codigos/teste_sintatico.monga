@@ -1,5 +1,6 @@
 VAR x: int;
 VAR y: float;
+VAR hex: int;
 
 FUNCTION main() {
     IF(1 < 3) {
@@ -37,7 +38,9 @@ FUNCTION main() {
     }
 
     x = 10;
-    call = 10;
+    y = 2.3;
+    hex = 0xFFFF;
+    call(10, 20);
     @ 3;
 
 }

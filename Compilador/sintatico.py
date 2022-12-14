@@ -233,6 +233,7 @@ class Sintatico:
         if self.tokenEsperadoEncontrado(tt.ID2):
             self.consome(tt.ID2)
             self.call()
+            self.consome(tt.PTEVIRG)
         if self.tokenEsperadoEncontrado(tt.PRINT):
             self.consome(tt.PRINT)
             self.exp()
@@ -245,6 +246,7 @@ class Sintatico:
         if self.tokenEsperadoEncontrado(tt.INT) or self.tokenEsperadoEncontrado(tt.ADD) or self.tokenEsperadoEncontrado(tt.SUB) or self.tokenEsperadoEncontrado(tt.NOT):
             self.exp()
             if self.tokenEsperadoEncontrado(tt.OPENCOL):
+                print('Colchete encontrado')
                 self.consome(tt.OPENCOL)
                 self.exp()
                 self.consome(tt.CLOSECOL)
@@ -399,11 +401,9 @@ class Sintatico:
             
     def call(self):
         print('call')
-        if self.tokenEsperadoEncontrado(tt.ID):
-            self.consome(tt.ID)
-            self.consome(tt.OPENPAR)
-            self.explist()
-            self.consome(tt.CLOSEPAR)
+        self.consome(tt.OPENPAR)
+        self.explist()
+        self.consome(tt.CLOSEPAR)
     
     def explist(self):
         print('explist')

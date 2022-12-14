@@ -124,7 +124,8 @@ class Token:
 class Lexico:
     # dicionario de palavras reservadas
     reservadas = {'VAR': TipoToken.VAR, 'FUNCTION': TipoToken.FUNCTION, 'IF': TipoToken.IF, 'ELSE': TipoToken.ELSE, 'RETURN': TipoToken.RETURN, 'WHILE': TipoToken.WHILE, 'PRINT': TipoToken.PRINT, 'int': TipoToken.INT, 'float': TipoToken.FLOAT}
-
+    
+    hex = {'0', '1', '3', '4', '5', '6', '7', '8', '9', 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f'}
     def __init__(self, nomeArquivo):
         self.nomeArquivo = nomeArquivo
         self.arquivo = None
@@ -222,11 +223,12 @@ class Lexico:
                 # estado que trata numeros inteiros
                 lexema = lexema + car
                 car = self.getChar()
-                
                 if car == '.':
                     estado = 6
+                if car == 'x':
+                    estado = 7
                 else:
-                    if car is None or (not car.isdigit()):
+                    if car is None or (not car.isdigit()) and (car is not '.'):
                         # terminou o numero
                         self.ungetChar(car)
                         return Token(TipoToken.INT, lexema, self.linha)
@@ -263,6 +265,8 @@ class Lexico:
                     return Token(TipoToken.VIRG, lexema, self.linha)
                 elif car == '.':
                     return Token(TipoToken.PT, lexema, self.linha)
+                elif car == '|':
+                    return Token(TipoToken.ERRO, lexema, self.linha)
                 elif car == '@':
                     return Token(TipoToken.PRINT, lexema, self.linha)
                 elif car == '&':
@@ -334,3 +338,11 @@ class Lexico:
                 if not car.isdigit():
                     self.ungetChar(car)
                     return Token(TipoToken.FLOAT, lexema, self.linha)
+                
+            elif estado == 7:
+                lexema = lexema + car
+                car = self.getChar()
+                if not car in Lexico.hex:
+                    relhex = int(lexema, 16)
+                    self.ungetChar(car)
+                    return Token(TipoToken.INT, relhex, self.linha)
