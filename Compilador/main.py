@@ -15,7 +15,7 @@ if __name__ == '__main__':
     
    #LEXICO
     
-   nome = 'codigos/teste_sintatico.monga'
+   nome = 'codigos/teste_lexico.monga'
    lex = Lexico(nome)
    lex.abreArquivo()
 

@@ -1,3 +1,11 @@
+"""
+
+Nome Discente: Henrique Fugie de Macedo
+Matrícula: 0056151
+Data: 14/12
+
+"""
+
 class TabelaSimbolos:
 
     def __init__(self):

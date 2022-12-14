@@ -1,8 +1,0 @@
-VAR x: int;
-
-FUNCTION main(){
-
-    IF(1<3){
-        @1234;
-    }
-}

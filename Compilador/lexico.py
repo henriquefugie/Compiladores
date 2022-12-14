@@ -195,8 +195,6 @@ class Lexico:
                     estado = 4
                 elif car == '#':
                     estado = 5
-                elif car == '#':
-                    estado = 5
                 else:
                     return Token(TipoToken.ERROR, '<' + car + '>', self.linha)
                 

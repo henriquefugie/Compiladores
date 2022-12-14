@@ -274,7 +274,6 @@ class Sintatico:
         print('Or')
         self.And()
         self.restoOr()
-        pass
     
     def restoOr(self):
         print('restoOr')
@@ -289,7 +288,6 @@ class Sintatico:
         print('And')
         self.Not()
         self.restoAnd()
-        pass
 
     def restoAnd(self):
         print('restoAnd')
@@ -305,9 +303,8 @@ class Sintatico:
         if self.tokenEsperadoEncontrado(tt.NOT):
             self.consome(tt.NOT)
             self.Not()
-            self.rel()
         else:
-            pass
+            self.rel()
 
     def rel(self):
         print('rel')
@@ -335,7 +332,7 @@ class Sintatico:
            self.consome(tt.MAIORIG)
            self.add()
         else:
-           pass 
+           pass
        
     def add(self):
         print('add')
@@ -347,11 +344,13 @@ class Sintatico:
         if self.tokenEsperadoEncontrado(tt.ADD):
            self.consome(tt.ADD)
            self.mult()
+           self.restoAdd()
         if self.tokenEsperadoEncontrado(tt.SUB):
-           self.consome(tt.SUB)
-           self.mult()
+            self.consome(tt.SUB)
+            self.mult()
+            self.restoAdd()
         else:
-           pass 
+           pass
        
     def mult(self):
         print('mult')
@@ -373,7 +372,7 @@ class Sintatico:
            self.uno()
            self.restoMult()
         else:
-           pass 
+           pass
        
     def uno(self):
         print('uno')
@@ -396,6 +395,7 @@ class Sintatico:
             self.consome(tt.OPENPAR)
             self.atrib()
             self.consome(tt.CLOSEPAR)
+        
             
     def call(self):
         print('call')
