@@ -4,30 +4,64 @@ Nome Discente: Henrique Fugie de Macedo
 Matrícula: 0056151
 Data: 14/12
 
- Linguagem Toy
 
-    Gramatica::
+Declaro que sou o único autor e responsável por este programa. Todas as partes do programa, exceto as que foram fornecidas
+pelo professor ou copiadas do livro ou das bibliotecas de Aho et al., foram desenvolvidas por mim. Declaro também que
+sou responsável por todas  as eventuais cópias deste programa e que não distribui nem facilitei a distribuição de cópias.
+    
+Linguagem Monga
 
-    F* --> C Rf
-    Rf --> C Rf | lambda
-    C  --> A | R | P
-    A --> ident = E ;
-    R --> read ( ident ) ;
-    P --> print ( ident ) ;
+    program : { definition }
 
-    E --> M Rs
-    Rs --> + M Rs | lambda
-    M --> Op Rm
-    Rm --> * Op Rm | lambda
-    Op --> ( E ) | num | ident
+    definition : def-variable | def-function
 
-    Tokens::
+    def-variable : VAR ID ':' type ';'
 
-    IDENT ATRIB READ PTOVIRG PRINT ADD MULT OPENPAR CLOSEPAR NUM ERROR FIMARQ
+    type : ID
 
-    Comentarios::
+    def-function : FUNCTION ID '(' parameters ')' [':' type] block
 
-    iniciam com # ate o fim da linha
+    parameters : [ parameter { ',' parameter } ]
+
+    parameter : ID ':' type
+
+    block : '{' { def-variable } { statement } '}'
+
+    statement : IF exp block [ ELSE block ]
+            | WHILE exp block
+            | var '=' exp ';'
+            | RETURN [ exp ] ';'
+            | call ';'
+            | '@' exp ';'
+            | block
+
+    var : ID | exp '[' exp ']' | exp '.' ID
+
+    <exp> -> <atrib>
+    <atrib> -> <or> <restoAtrib>
+    <restoAtrib> -> '=' <atrib> | lambda
+    <or> -> <and> <restoOr>
+    <restoOr> -> '||' <and> <restoOr> | lambda
+    <and> -> <not> <restoAnd>
+    <restoAnd> -> '&&' <not> <restoAnd> | lambda
+    <not> -> '!' <not> | <rel>
+    <rel> -> <add> <restoRel>
+    <restoRel> -> '==' <add> | '!=' <add>
+                | '<' <add> | '<=' <add> 
+                | '>' <add> | '>=' <add> | lambda
+    <add> -> <mult> <restoAdd>
+    <restoAdd> -> '+' <mult> <restoAdd> 
+                | '-' <mult> <restoAdd> | lambda
+    <mult> -> <uno> <restoMult>
+    <restoMult> -> '*' <uno> <restoMult>
+                |  '/' <uno> <restoMult> 
+                |  '%' <uno> <restoMult> | lambda
+    <uno> -> '+' <uno> | '-' <uno> | <fator>
+    <fator> -> 'NUMint' | 'NUMfloat' | '(' <atrib> ')'
+
+    call : ID '(' explist ')'
+
+    explist : [ exp { ',' exp } ]
 
 """
 

@@ -1,0 +1,8 @@
+VAR x: int;
+VAR y: float;
+VAR z: int;
+
+FUNCTION main() {
+    x[0] = 100;
+    y = 222.544
+}

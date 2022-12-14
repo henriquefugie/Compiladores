@@ -195,6 +195,8 @@ class Lexico:
                     estado = 4
                 elif car == '#':
                     estado = 5
+                elif car == '#':
+                    estado = 5
                 else:
                     return Token(TipoToken.ERROR, '<' + car + '>', self.linha)
                 
@@ -216,11 +218,13 @@ class Lexico:
                 lexema = lexema + car
                 car = self.getChar()
                 
-                
-                if car is None or (not car.isdigit()):
-                    # terminou o numero
-                    self.ungetChar(car)
-                    return Token(TipoToken.INT, lexema, self.linha)
+                if car == '.':
+                    estado = 6
+                else:
+                    if car is None or (not car.isdigit()):
+                        # terminou o numero
+                        self.ungetChar(car)
+                        return Token(TipoToken.INT, lexema, self.linha)
             elif estado == 4:
                 # estado que trata outros tokens primitivos comuns
                 lexema = lexema + car
@@ -318,7 +322,14 @@ class Lexico:
                     car = self.getChar()
                 self.ungetChar(car)
                 estado = 1
-
+                
+            elif estado == 6:
+                lexema = lexema + car
+                car = self.getChar()
+                if not car.isdigit():
+                    self.ungetChar(car)
+                    return Token(TipoToken.FLOAT, lexema, self.linha)
+                
 if __name__== "__main__":
 
    #nome = input("Entre com o nome do arquivo: ")
