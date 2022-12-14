@@ -123,7 +123,7 @@ class Token:
 
 class Lexico:
     # dicionario de palavras reservadas
-    reservadas = {'VAR': TipoToken.VAR, 'FUNCTION': TipoToken.FUNCTION, 'IF': TipoToken.IF, 'ELSE': TipoToken.ELSE, 'RETURN': TipoToken.RETURN, 'WHILE': TipoToken.WHILE, 'PRINT': TipoToken.PRINT}
+    reservadas = {'VAR': TipoToken.VAR, 'FUNCTION': TipoToken.FUNCTION, 'IF': TipoToken.IF, 'ELSE': TipoToken.ELSE, 'RETURN': TipoToken.RETURN, 'WHILE': TipoToken.WHILE, 'PRINT': TipoToken.PRINT, 'int': TipoToken.INT, 'float': TipoToken.FLOAT}
 
     def __init__(self, nomeArquivo):
         self.nomeArquivo = nomeArquivo
@@ -206,12 +206,19 @@ class Lexico:
                 car = self.getChar()
                 if car is None or (not car.isalnum()):
                     # terminou o nome
-                    
                     self.ungetChar(car)
                     if lexema in Lexico.reservadas:
                         return Token(Lexico.reservadas[lexema], lexema, self.linha)
+                    if len(lexema) > 32:
+                        return Token(TipoToken.ERRO, lexema, self.linha)
                     else:
-                        return Token(TipoToken.ID, lexema, self.linha)
+                        car2 = self.getChar()
+                        if car2 == '(':
+                            self.ungetChar(car2)
+                            return Token(TipoToken.ID2, lexema, self.linha)
+                        else:
+                            self.ungetChar(car2)
+                            return Token(TipoToken.ID, lexema, self.linha)
                     
             elif estado == 3:
                 # estado que trata numeros inteiros
@@ -329,17 +336,3 @@ class Lexico:
                 if not car.isdigit():
                     self.ungetChar(car)
                     return Token(TipoToken.FLOAT, lexema, self.linha)
-                
-if __name__== "__main__":
-
-   #nome = input("Entre com o nome do arquivo: ")
-   nome = 'exemplo.toy'
-   lex = Lexico(nome)
-   lex.abreArquivo()
-
-   while(True):
-       token = lex.getToken()
-       print("token= %s , lexema= (%s), linha= %d" % (token.msg, token.lexema, token.linha))
-       if token.const == TipoToken.FIMARQ[0]:
-           break
-   lex.fechaArquivo()

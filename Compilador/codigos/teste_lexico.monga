@@ -1,4 +1,5 @@
 abc
+caaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab
 (
 )
 {
@@ -12,7 +13,7 @@ abc
 ;
 ,
 .
-id(
+main(
 VAR
 FUNCTION
 IF
