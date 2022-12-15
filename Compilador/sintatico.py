@@ -142,7 +142,7 @@ class Sintatico:
     def verificaInt(self, var, linha): #funcao feita para verificar se os valores em IF e WHILE e o retorno de operacoes logicas serem sempre int, caso não, ele retorna um erro semantico
         if self.deuErro:
             return
-        if var is not int:
+        if type(var) is not int:
             self.deuErro = True
             msg = "Variavel " + var + " nao possui valor int."
             self.semantico.erroSemantico(msg, linha)
