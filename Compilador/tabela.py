@@ -5,7 +5,7 @@ Matrícula: 0056151
 Data: 14/12
 
 """
-
+#Esta tabela foi reutilizda dos materiais fornecidos pelo professor Mario
 class TabelaSimbolos:
 
     def __init__(self):
@@ -29,3 +29,6 @@ class TabelaSimbolos:
 
     def atribuiValor(self, nome, valor):
         self.tabela[nome] = valor
+
+    def items(self):
+        return self.tabela

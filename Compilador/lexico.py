@@ -65,9 +65,10 @@ Linguagem Monga
 
 """
 from os import path
+import struct
 
 class TipoToken:
-    ID = (1, 'id')
+    ID = (1, 'id') #tokens principais do compilador
     OPENPAR = (2, '(')
     CLOSEPAR = (3, ')')
     OPENCHA = (4, '{')
@@ -81,7 +82,7 @@ class TipoToken:
     PT = (12, '.')
     ID2 = (38, 'id2')
     
-    VAR = (13, 'var')
+    VAR = (13, 'var') #palavras reservadas
     FUNCTION = (14, 'function')
     IF = (15, 'if')
     ELSE = (16, 'else')
@@ -89,23 +90,23 @@ class TipoToken:
     WHILE = (18, 'while')
     PRINT = (19, '@')
     
-    INT = (20, 'int')
+    INT = (20, 'int') #tipos de variaveis
     FLOAT = (21, 'float')
     
-    ERRO = (22, 'erro')
+    ERRO = (22, 'erro') #casos especificos
     FIMARQ = (23, 'fim-de-arquivo')
     
-    AND = (24, '&&')
+    AND = (24, '&&') #operacoes logicas
     OR = (25, '||')
     NOT = (26, '!')
     
-    ADD = (27, '+')
+    ADD = (27, '+') #operacoes simples
     MULT = (28, '*')
     SUB = (29, '-')
     MOD = (30, '%')
     DIV = (31, '/')
     
-    MENOR = (32, '<')
+    MENOR = (32, '<') #oepracoes logicas
     MAIOR = (33, '>')
     MENORIG = (34, '<=')
     MAIORIG = (35, '>=')
@@ -125,7 +126,7 @@ class Lexico:
     # dicionario de palavras reservadas
     reservadas = {'VAR': TipoToken.VAR, 'FUNCTION': TipoToken.FUNCTION, 'IF': TipoToken.IF, 'ELSE': TipoToken.ELSE, 'RETURN': TipoToken.RETURN, 'WHILE': TipoToken.WHILE, 'PRINT': TipoToken.PRINT, 'int': TipoToken.INT, 'float': TipoToken.FLOAT}
     
-    hex = {'0', '1', '3', '4', '5', '6', '7', '8', '9', 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f'}
+    hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', '.'} #lista para separar os caracteres que o hexadecimal consegue receber e . para numeros float em hexadecimal
     def __init__(self, nomeArquivo):
         self.nomeArquivo = nomeArquivo
         self.arquivo = None
@@ -208,7 +209,7 @@ class Lexico:
                     self.ungetChar(car)
                     if lexema in Lexico.reservadas:
                         return Token(Lexico.reservadas[lexema], lexema, self.linha)
-                    if len(lexema) > 32:
+                    if len(lexema) > 32: #respeitando o limite de 32 caracteres dentro do id
                         return Token(TipoToken.ERRO, lexema, self.linha)
                     else:
                         car2 = self.getChar()
@@ -224,9 +225,9 @@ class Lexico:
                 lexema = lexema + car
                 car = self.getChar()
                 if car == '.':
-                    estado = 6
+                    estado = 6 #estado que trata dos valores float
                 if car == 'x':
-                    estado = 7
+                    estado = 7 #estado que trata dos valores hexadecimais
                 else:
                     if car is None or (not car.isdigit()) and (car is not '.'):
                         # terminou o numero
@@ -265,13 +266,11 @@ class Lexico:
                     return Token(TipoToken.VIRG, lexema, self.linha)
                 elif car == '.':
                     return Token(TipoToken.PT, lexema, self.linha)
-                elif car == '|':
-                    return Token(TipoToken.ERRO, lexema, self.linha)
                 elif car == '@':
                     return Token(TipoToken.PRINT, lexema, self.linha)
                 elif car == '&':
                     car2 = self.getChar()
-                    if car2 != '&':
+                    if car2 != '&': #neste caso especifico, foi criado outro car para identificar o que vem na frente, a espiada que foi recomendada ser feita, serepetindo apra o caso de ==, !+, || e os casos com < e >
                         self.ungetChar(car2)
                         return Token(TipoToken.ERRO, lexema, self.linha)
                     else:
@@ -332,17 +331,23 @@ class Lexico:
                 self.ungetChar(car)
                 estado = 1
                 
-            elif estado == 6:
+            elif estado == 6: #tratando numero float
                 lexema = lexema + car
                 car = self.getChar()
                 if not car.isdigit():
                     self.ungetChar(car)
                     return Token(TipoToken.FLOAT, lexema, self.linha)
                 
-            elif estado == 7:
+            elif estado == 7: #tratando numero hexadecimal
+                ch = '.' #verifica se é um float em hexadecimal
                 lexema = lexema + car
                 car = self.getChar()
                 if not car in Lexico.hex:
-                    relhex = int(lexema, 16)
-                    self.ungetChar(car)
-                    return Token(TipoToken.INT, relhex, self.linha)
+                    if ch in lexema:
+                        floathex = float.fromhex(lexema)
+                        self.ungetChar(car)
+                        return Token(TipoToken.FLOAT, floathex, self.linha)
+                    else:
+                        relhex = int(lexema, 16)
+                        self.ungetChar(car)
+                        return Token(TipoToken.INT, relhex, self.linha)

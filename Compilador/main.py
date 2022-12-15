@@ -5,16 +5,17 @@ Matrícula: 0056151
 Data: 14/12
 
 """
+#bibliotecas usadas para utilizar o sistema através do terminal
 import sys
 import getopt
 
 from lexico import Lexico, TipoToken
 from sintatico import Sintatico
 
+#funcao que possibilita a exeucacao do compilador pelo terminal
 def myfunc(argv):
+   nome1 = ""
    salvar = ""
-   arg_output = ""
-   arg_user = ""
    arg_help = "{0} -t <nome_arquivo>".format(argv[0])
     
    try:
@@ -29,12 +30,12 @@ def myfunc(argv):
             sys.exit(2)
         elif opt in ("-t", "--nome_arquivo"):
             salvar = arg
-   print('Tradutor Monga \n')
+   print('Tradutor Monga')
+   nome1 = input('Digite o nome do arquivo .monga que deseja utilizar na analise: ') #Recebe o nome do arquivo que o analisador lexico e sintatico/semantico vão analisar
    
    print('Lexico')
    #LEXICO
-    
-   nome = 'codigos/teste_sintatico.monga'
+   nome = ('codigos/'+nome1)
    lex = Lexico(nome)
    lex.abreArquivo()
 
@@ -45,14 +46,18 @@ def myfunc(argv):
          break
    lex.fechaArquivo()
     
-   print('Sintatico')
-    #SINTATICO
-    
-   nome = 'codigos/teste_sintatico.monga'
+   print('Sintatico e Semantico')
+    #SINTATICO e Semantico
+   nome = ('codigos/'+nome1)
    parser = Sintatico()
    ok = parser.traduz(nome)
    if ok:
-      print("Arquivo sintaticamente correto.")
+     tabela = parser.tabela()
+     with open("codigos/"+salvar, "w") as f:
+          f.write(tabela)
+          
+     print("Arquivo sintaticamente e semanticamente correto.")
     
 if __name__ == '__main__':
    myfunc(sys.argv)
+   
